@@ -1,0 +1,36 @@
+script
+    |   function openDir(dir) { window.location = dir; }
+
+- var i = 0;
+- var j = 0;
+
+.overlay
+
+.Navigation
+
+    - for(j; j<nav.length; j++){
+
+    .item(onclick='openDir("'+nav[j].link+'")')= nav[j].name
+
+    - }
+
+.Explorer
+
+    a(ondblclick='openDir("'+path + '+..' +'")')
+        .item(class='dir', title='parent')
+            .img
+                img(src='/images/icons/maindir.png')
+            .title= '..'
+
+
+    - for (i; i < dir.length; i++) {
+
+    - var imgSrc = '/images/icons/' + (dir[i].isDir ? 'dir.png' : 'file.png');
+
+    a(ondblclick=(dir[i].isDir ? 'openDir("'+ path + '+' + dir[i].name +'")' : ''))
+        .item(class=className, title=dir[i].name)
+            .img
+                img(src=imgSrc)
+            .title= dir[i].name
+
+    - }
