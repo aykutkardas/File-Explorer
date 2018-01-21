@@ -46,10 +46,23 @@ class FileExplorer {
         let i =0;
 
         for(i; i < len; i++) {
-            jsonDirList.push({
-                name: list[i],
-                isDir: this.isDir(list[i])
-            });
+
+            if (this.isDir(list[i])) {
+                jsonDirList.push({
+                    name: list[i],
+                    isDir: true,
+                    icon: 'dir.png',
+                    link: list[i]
+                });
+            } else {
+                jsonDirList.push({
+                    name: list[i],
+                    isDir: false,
+                    icon: 'file.png',
+                    link: ''
+                });
+            }
+
         }
 
         this.jsonDir = jsonDirList;
@@ -94,36 +107,25 @@ class FileExplorer {
     }
 
     /*
-     * fix path
-     * input:    "project+files+scripts+..+images+..+.."
-     * |>        "project+[files[scripts+..][images+..]+..]"
-     * output    "project"
-     */
-    fixPath(p) {
-
-        const path = p.replace(/\+{1,3}/g, '+').split('+');
-
-        while (path.indexOf('..') > 1)
-            path.splice(path.indexOf('..') - 1, 2);
-
-        return path.join('+');
-
-    }
-
-    /*
      * Navigation Bar
      * @return items with link
      */
     getNavigation(p) {
 
-        const list = this.fixPath(p).split('+');
+        const list = p.split('+');
+        
+        while (list.indexOf("") > -1) {
+            let index = list.indexOf("");
+            list.splice(index-1, 1);
+        }
+        
         const len  = list.length;
         const nav  = [];
         let link = "";
         let i = 0;
 
         for(i; i < len; i++) {
-            link+= "+" + list[i]; 
+            link+= list[i] + "+"; 
             nav.push({
                 name: list[i],
                 link
@@ -132,6 +134,13 @@ class FileExplorer {
 
         return nav;
 
+    }
+
+    /*
+     * Convert Url to Path
+     */
+    urlToPath(p) {
+        return this.rootPath + (p != "" ? p.split('+').join('/') : "");
     }
 
     /*

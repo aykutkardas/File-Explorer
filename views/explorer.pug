@@ -1,6 +1,3 @@
-script
-    |   function openDir(dir) { window.location = dir; }
-
 - var i = 0;
 - var j = 0;
 
@@ -8,15 +5,17 @@ script
 
 .Navigation
 
+    .item(onclick='backDir("..")') /
+
     - for(j; j<nav.length; j++){
 
-    .item(onclick='openDir("'+nav[j].link+'")')= nav[j].name
+    .item(onclick='backDir("'+nav[j].link+'")')= nav[j].name
 
     - }
 
 .Explorer
 
-    a(ondblclick='openDir("'+path + '+..' +'")')
+    a(ondblclick='openDir("..")')
         .item(class='dir', title='parent')
             .img
                 img(src='/images/icons/maindir.png')
@@ -25,12 +24,10 @@ script
 
     - for (i; i < dir.length; i++) {
 
-    - var imgSrc = '/images/icons/' + (dir[i].isDir ? 'dir.png' : 'file.png');
-
-    a(ondblclick=(dir[i].isDir ? 'openDir("'+ path + '+' + dir[i].name +'")' : ''))
+    a(ondblclick='openDir("'+ dir[i].link +'")')
         .item(class=className, title=dir[i].name)
             .img
-                img(src=imgSrc)
+                img(src='/images/icons/' + dir[i].icon)
             .title= dir[i].name
 
     - }

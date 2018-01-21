@@ -10,15 +10,15 @@ router.get('/:path?', (req, res, next) => {
   let path = "";
 
   if (req.params.path)
-    path = explorer.fixPath(req.params.path);
+    path = req.params.path;
 
   // Check
-  if (path.slice(0, 3) == '+..') {
+  if (path.indexOf('..') > -1 && path.indexOf('..') < 2)
     path = "";
-  }
+
 
   // Convert Url to Path
-  dirPath = explorer.rootPath + (path != "" ? path.split('+').join('/') : "");
+  dirPath = explorer.urlToPath(path);
 
 
   // Trigger File Explorer and return Navigation Data
@@ -27,7 +27,6 @@ router.get('/:path?', (req, res, next) => {
   res.render('index', {
     title: 'File Explorer',
     dir: explorer.jsonDir,
-    rootPath: explorer.rootPath,
     path,
     nav
   });
